@@ -3,10 +3,12 @@ name: Run Cypress E2E Tests
 on:
   push:
     branches:
-      - 'master'
+      - '*'
   pull_request:
     branches:
-      - 'master'
+      - '*'
+
+  workflow_dispatch:
 
 jobs:
   cypress-run:
@@ -14,10 +16,10 @@ jobs:
 
     steps:
       - name:  Checkout repository
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@37991abc5fead6b2f7b84e8ca1794d905c2c6f87
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4.0.2
+        uses: actions/setup-node@7ef6fb9a31cacc2e9fa8bc924edce5ef28f4fcd0
         with:
           node-version: 20
           cache: npm
