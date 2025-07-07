@@ -16,10 +16,10 @@ jobs:
 
     steps:
       - name:  Checkout repository
-        uses: actions/checkout@37991abc5fead6b2f7b84e8ca1794d905c2c6f87
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Set up Node.js
-        uses: actions/setup-node@7ef6fb9a31cacc2e9fa8bc924edce5ef28f4fcd0
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af
         with:
           node-version: 20
           cache: npm
