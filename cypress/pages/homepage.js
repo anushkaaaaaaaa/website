@@ -16,7 +16,7 @@ class HomePage {
 
   verifyHeader() {
     this.verifyHeadingExists(
-      'Building the future of Event-Driven Architectures (EDA)',
+      'Building the of Event-Driven Architectures (EDA)',
     );
   }
 }
