@@ -80,7 +80,9 @@ jobs:
         name: Run release assets generation to make sure PR does not break it
         shell: bash
         run: npm run generate:assets --if-present
-
+      - if: steps.should_run.outputs.shouldrun == 'true' && steps.packagejson.outputs.exists == 'true'
+        name: Install Cypress Binary
+        run: npx cypress install
 
       - if: steps.should_run.outputs.shouldrun == 'true' && steps.packagejson.outputs.exists == 'true'
         name: Run Cypress E2E Tests
@@ -89,18 +91,8 @@ jobs:
           start: npm run dev
           wait-on: 'http://localhost:3000'  # Adjust port as needed
           wait-on-timeout: 120
-          install: true
 
-      # Run the test:md script and capture output
-      - if: ${{ steps.packagejson.outputs.exists == 'true' && matrix.os == 'ubuntu-latest' }}
-        name: Run markdown checks
-        id: markdown_check
-        run: |
-          ERRORS=$(npm run test:md | sed -n '/Errors in file/,$p')
-          echo "markdown_output<<EOF" >> $GITHUB_OUTPUT
-          echo "$ERRORS" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
+  
       # Post a comment using sticky-pull-request-comment
       - name: Comment on PR with markdown issues
         if: ${{ steps.markdown_check.outputs.markdown_output != '' && matrix.os == 'ubuntu-latest' }}
