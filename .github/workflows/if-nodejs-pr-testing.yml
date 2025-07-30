@@ -80,6 +80,7 @@ jobs:
         name: Run release assets generation to make sure PR does not break it
         shell: bash
         run: npm run generate:assets --if-present
+
       - if: steps.should_run.outputs.shouldrun == 'true' && steps.packagejson.outputs.exists == 'true'
         name: Install Cypress Binary
         run: npx cypress install
@@ -154,11 +155,4 @@ jobs:
 
       # Delete the comment if there are no issues
      
-      - if: steps.packagejson.outputs.exists == 'true'
-        name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673
-        with:
-          fail_ci_if_error: true
-          files: ./coverage/lcov.info
-          token: ${{ secrets.CODECOV_TOKEN }}
-          verbose: true
+    
