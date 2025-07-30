@@ -82,6 +82,15 @@ jobs:
         run: npm run generate:assets --if-present
 
       - if: steps.packagejson.outputs.exists == 'true' && matrix.os == 'macos-13'
+        name: Cache Cypress binary on macOS
+        uses: actions/cache@v3
+        with:
+         path: ~/Library/Caches/Cypress
+         key: cypress-cache-macos-${{ hashFiles('**/package-lock.json') }}
+         restore-keys: |
+          cypress-cache-macos-
+
+      - if: steps.packagejson.outputs.exists == 'true' && matrix.os == 'macos-13'
         name: Install Cypress Binary (macOS only)
         run: npx cypress install
 
