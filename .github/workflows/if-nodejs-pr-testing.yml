@@ -108,4 +108,4 @@ jobs:
           start: npm run dev -- -H 0.0.0.0 -p 3000
           wait-on: 'http://localhost:3000'  # Adjust port as needed
           wait-on-timeout: 120
-          
+          install: true
