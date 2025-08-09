@@ -3,10 +3,10 @@ name: Run Cypress E2E Tests
 on:
   push:
     branches:
-      - 'master'
+      - '*'
   pull_request:
     branches:
-      - 'master'
+      - '*'
 
 jobs:
   cypress-run:
@@ -29,3 +29,4 @@ jobs:
         uses: cypress-io/github-action@6c143abc292aa835d827652c2ea025d098311070
         with:
           start: npm run dev
+
