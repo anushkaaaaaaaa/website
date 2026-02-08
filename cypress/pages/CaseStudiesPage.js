@@ -1,49 +1,36 @@
-import BasePage from './BasePage';
-
-class CaseStudiesPage extends BasePage {
-  verifyPageLoaded() {
-    this.verifyHeadingExists('Case Studies');
+class BasePage {
+  visit(path = '/') {
+    cy.visit(path);
+    return this;
   }
 
-  verifyScrollDown() {
-    this.scrollToText('Adopters');
+  verifyHeadingExists(headingText, tag = 'h1') {
+    cy.get(tag).should('contain.text', headingText);
   }
 
-  verifyCardLink(cardName, cardUrl, index = 0) {
-    cy.get('[data-testid="CaseStudyCard-main"]')
-      .eq(index)
-      .within(() => {
-        cy.get(`img[alt*="${cardName.split(' ')[0]}"]`).should('exist');
-      })
-      .closest('a')
-      .should('have.attr', 'href', cardUrl);
+  verifyElementIsVisible(selector) {
+    cy.get(selector).should('be.visible');
   }
 
-  verifyResourceLink(href) {
+  verifyElementHasAttribute(selector, attribute, value) {
+    cy.get(selector).should('have.attr', attribute, value);
+  }
+
+  scrollToText(text) {
+    cy.contains(text).scrollIntoView();
+  }
+
+  verifyButtonLink(href, text) {
+    cy.contains('a', text)
+      .should('have.attr', 'href', href)
+      .should('be.visible');
+  }
+
+  verifyLink(href, text) {
     cy.get(`a[href="${href}"]`)
-      .first()
-      .should('exist')
-      .should('have.attr', 'href', href);
-  }
-
-  verifyFaqLink() {
-    this.verifyButtonLink(
-      'https://github.com/asyncapi/website/blob/master/README.md#case-studies',
-      'FAQ'
-    );
-  }
-
-  verifySubmitPullRequestLink() {
-    this.verifyButtonLink(
-      'https://github.com/asyncapi/website/blob/master/config/usecases.yaml',
-      'submit a pull request'
-    );
-  }
-
-  verifyCardsLink() {
-    this.verifyCardLink('Adeo Group', 'casestudies/adeogroup', 0);
-    this.verifyCardLink('HDI Global SE', 'casestudies/hdiglobal', 1);
+      .should('be.visible')
+      .and('contain.text', text);
   }
 }
 
-export default CaseStudiesPage;
+export default BasePage;

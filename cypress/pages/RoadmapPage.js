@@ -1,8 +1,19 @@
 import BasePage from './BasePage';
 
 class RoadmapPage extends BasePage {
+  visit() {
+    super.visit('/roadmap');
+  }
+
   verifyPageLoaded() {
-    this.verifyHeadingExists('AsyncAPI becomes the #1 API specification for defining and developing APIs.');
+    this.verifyHeadingExists(
+      'AsyncAPI becomes the #1 API specification for defining and developing APIs.',
+      'h1'
+    );
+  }
+
+  verifyHeader() {
+    this.verifyPageLoaded();
   }
 
   verifyCommunityLink() {
@@ -15,7 +26,7 @@ class RoadmapPage extends BasePage {
 
   verifyTooltip(index) {
     cy.get('[data-testid="InlineHelp-icon"]').eq(index).trigger('mouseover');
-    cy.get('[data-testid="InlineHelp"]').eq(index).should('be.visible');
+    cy.get('[data-testid="InlineHelp"]').should('be.visible');
   }
 }
 

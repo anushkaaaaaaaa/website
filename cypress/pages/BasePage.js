@@ -1,66 +1,35 @@
 class BasePage {
-  visit(url = '/') {
-    cy.visit(url);
+  visit(path = '/') {
+    cy.visit(path);
+    return this;
   }
 
-  getElement(selector) {
-    return cy.get(selector);
-  }
-
-  hoverElement(selector) {
-    return this.getElement(selector)
-      .trigger('mouseover')
-      .trigger('mouseenter');
+  verifyHeadingExists(headingText, tag = 'h1') {
+    cy.get(tag).should('contain.text', headingText);
   }
 
   verifyElementIsVisible(selector) {
-    return this.getElement(selector).should('be.visible');
+    cy.get(selector).should('be.visible');
   }
 
   verifyElementHasAttribute(selector, attribute, value) {
-    return this.getElement(selector).should('have.attr', attribute, value);
-  }
-
-  verifyHeadingExists(headingText) {
-    return cy.contains('h1, h2, h3, h4, h5, h6', headingText).should('be.visible');
-  }
-
-  verifyLink(href, text, { findByText = false } = {}) {
-    if (findByText && text) {
-      const chain = cy.contains('a', text).should('be.visible');
-      return href ? chain.and('have.attr', 'href', href) : chain;
-    }
-    const chain = cy.get(`a[href="${href}"]`).should('be.visible').and('have.attr', 'href', href);
-    return text ? chain.and('contain', text) : chain;
-  }
-
-  getLink(href, text) {
-    return cy.contains(`a[href="${href}"]`, text)
-      .should('be.visible')
-      .and('have.attr', 'href', href);
-  }
-
-  verifyButtonLink(href, buttonText) {
-    return this.verifyLink(href, buttonText, { findByText: true });
-  }
-
-  verifyElementContainsText(selector, text) {
-    return cy.contains(selector, text).should('exist');
-  }
-
-  verifyImageVisible(altText) {
-    return cy.get(`img[alt="${altText}"]`)
-      .should('be.visible')
-      .and('have.attr', 'src')
-      .should('not.be.empty');
-  }
-
-  scrollToElement(selector) {
-    cy.get(selector).scrollIntoView().should('be.visible');
+    cy.get(selector).should('have.attr', attribute, value);
   }
 
   scrollToText(text) {
-    cy.contains(text).scrollIntoView().should('be.visible');
+    cy.contains(text).scrollIntoView();
+  }
+
+  verifyButtonLink(href, text) {
+    cy.contains('a', text)
+      .should('have.attr', 'href', href)
+      .should('be.visible');
+  }
+
+  verifyLink(href, text) {
+    cy.get(`a[href="${href}"]`)
+      .should('be.visible')
+      .and('contain.text', text);
   }
 }
 

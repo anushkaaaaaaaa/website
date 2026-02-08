@@ -1,4 +1,3 @@
-import BasePage from './BasePage';
 import CaseStudiesPage from './CaseStudiesPage';
 import DocsPage from './DocsPage';
 import RoadmapPage from './RoadmapPage';
@@ -35,9 +34,30 @@ const homepageLinks = features.flatMap((feature) =>
   })),
 );
 
-class HomePage extends BasePage {
+class HomePage {
   visit() {
-    return super.visit('/');
+    cy.visit('/');
+  }
+
+  verifyElementIsVisible(selector) {
+    cy.get(selector).should('be.visible');
+  }
+
+  verifyElementHasAttribute(selector, attribute, value) {
+    cy.get(selector).should('have.attr', attribute, value);
+  }
+
+  verifyHeadingExists(headingText) {
+    cy.contains('h1, h2, h3, h4, h5, h6', headingText).should('be.visible');
+  }
+
+  verifyLinkExists(linkName, linkUrl) {
+    cy.get('a')
+      .contains(linkName, { matchCase: false })
+      .should('exist')
+      .then(($el) => {
+        cy.wrap($el).invoke('attr', 'href').should('include', linkUrl);
+      });
   }
 
   verifyCardTitles(customTitles, testId = null) {
@@ -51,20 +71,25 @@ class HomePage extends BasePage {
   }
 
   verifyNavbarLogo() {
-    return this.verifyElementIsVisible('[data-testid="Navbar-logo"]');
+    this.verifyElementIsVisible('[data-testid="Navbar-logo"]');
   }
 
-  verifyHeader(text = headerText) {
-    return this.verifyHeadingExists(text);
+  verifyHeader() {
+    this.verifyPageLoaded();
+  }
+
+  verifyPageLoaded() {
+    this.verifyHeadingExists(headerText);
   }
 
   verifyGithubStarButton(link = githubStarLink) {
     const selector = '[data-testid="Navbar-main"] [data-testid="Button-link"]';
-    return this.verifyElementIsVisible(selector).and('have.attr', 'href', link);
+    this.verifyElementIsVisible(selector);
+    this.verifyElementHasAttribute(selector, 'href', link);
   }
 
   verifyReadTheDocsButton(link = readDocsLink) {
-    return cy.get(`[data-testid="Button-link"][href="${link}"]`).should('be.visible');
+    cy.get(`[data-testid="Button-link"][href="${link}"]`).should('be.visible');
   }
 
   verifyHomepageCards(
